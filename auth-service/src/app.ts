@@ -29,8 +29,8 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(Proxy);
 app.use(UserAuthRoutes);
+app.use(Proxy);
 
 app.listen(port, () => {
   console.log(`Auth Server is Running at Port ${port}`);

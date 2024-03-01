@@ -29,8 +29,8 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(TransactionRoutes);
 app.use(UserRoutes);
+app.use(TransactionRoutes);
 
 app.listen(port, () => {
   console.log(`Transaction Server is Running at Port ${port}`);
