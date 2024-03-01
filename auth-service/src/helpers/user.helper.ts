@@ -41,8 +41,21 @@ export const checkEmailInRequest = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.body.email) {
-    const message = "EmailId not found";
+  if (!req.body.email || !req.body.password) {
+    const message = "Invalid Creds";
+    console.error(message);
+    return res.status(404).send(message);
+  }
+  next();
+};
+
+export const checkPasswordChangeCreds = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.body.email || !req.body.password || !req.body.newPassword) {
+    const message = "Invalid Creds";
     console.error(message);
     return res.status(404).send(message);
   }

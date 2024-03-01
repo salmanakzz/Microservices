@@ -4,6 +4,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -16,6 +17,7 @@ function Transaction() {
   const [history, setHistory] = useState([]);
 
   const userId = sessionStorage.getItem("userId");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     if (e.target.name === "input1") {
@@ -65,6 +67,11 @@ function Transaction() {
     return formattedTime;
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("userId");
+    navigate("/");
+  };
+
   return (
     <>
       <div>
@@ -82,6 +89,10 @@ function Transaction() {
 
         <div>
           <button onClick={handleSubmit}>Submit</button>
+        </div>
+
+        <div style={{ paddingTop: "10px" }}>
+          <button onClick={handleLogout}>Logout</button>
         </div>
 
         <div>
