@@ -10,4 +10,6 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 
 router.all("/api/transaction/*", TransationService);
 
+router.all("/api/user/*", TransationService);
+
 export default router;

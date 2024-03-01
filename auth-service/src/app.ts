@@ -1,4 +1,4 @@
-import express, { Request, Response, Application } from "express";
+import express, { Request, Response, Application, NextFunction } from "express";
 import dbConnect from "./config/connection";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
@@ -8,6 +8,7 @@ import cors from "cors";
 dotenv.config();
 
 import Proxy from "./routes/proxy";
+import UserAuthRoutes from "./routes/user.auth";
 
 const app: Application = express();
 const port = process.env.PORT || 4000;
@@ -23,12 +24,13 @@ dbConnect((err) => {
   }
 });
 
-app.use(function (req, res, next) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
   console.log(`method=${req.method} route=${req.url}`);
   next();
 });
 
 app.use(Proxy);
+app.use(UserAuthRoutes);
 
 app.listen(port, () => {
   console.log(`Auth Server is Running at Port ${port}`);

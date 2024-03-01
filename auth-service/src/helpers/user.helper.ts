@@ -35,3 +35,16 @@ export async function checkUserInRequest(
     res.status(500).send("Internal server error"); // Handle unexpected errors
   }
 }
+
+export const checkEmailInRequest = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.body.email) {
+    const message = "EmailId not found";
+    console.error(message);
+    return res.status(404).send(message);
+  }
+  next();
+};
