@@ -9,12 +9,17 @@ import { useNavigate } from "react-router-dom";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+interface HistoryType {
+  date: Date;
+  value: string;
+}
+
 function Transaction() {
   const [total, setTotal] = useState<number>(0);
   const [input1, setInput1] = useState<number>(0);
   const [input2, setInput2] = useState<number>(0);
 
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState<Array<HistoryType>>([]);
 
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
