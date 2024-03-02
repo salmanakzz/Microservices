@@ -18,6 +18,10 @@ function Transaction() {
   const [total, setTotal] = useState<number>(0);
   const [input1, setInput1] = useState<number>(0);
   const [input2, setInput2] = useState<number>(0);
+  const [error, setError] = useState({
+    id: -1,
+    value: false,
+  });
 
   const [history, setHistory] = useState<Array<HistoryType>>([]);
 
@@ -47,20 +51,30 @@ function Transaction() {
     setHistory(data.data.history.reverse());
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const totalVal = input1 + input2;
     setTotal(totalVal);
 
-    axios.post(
+    const payload = {
+      date: new Date(),
+      value: `${input1} + ${input2} = ${totalVal}`,
+    };
+
+    const { data } = await axios.post(
       `http://localhost:4000/api/transaction/history`,
       {
-        history: {
-          date: new Date(),
-          value: `${input1} + ${input2} = ${totalVal}`,
-        },
+        history: payload,
       },
       { headers: { "x-user-id": userId } }
     );
+    setHistory([payload, ...history]);
+
+    console.log(data);
+    if (data.status) {
+      setError({ id: -1, value: false });
+    } else {
+      setError({ id: 0, value: true });
+    }
   };
 
   const time = (timestamp: Date) => {
@@ -75,6 +89,14 @@ function Transaction() {
   const handleLogout = () => {
     sessionStorage.removeItem("userId");
     navigate("/");
+  };
+
+  const clearHistory = (idx: number) => {
+    setHistory(history.filter((item, id) => id !== idx));
+    setError({
+      id: -1,
+      value: false,
+    });
   };
 
   return (
@@ -105,12 +127,15 @@ function Transaction() {
         </div>
         <div>
           <h2>History: </h2>
-          {history.map((h) => (
+          {history.map((h, idx) => (
             <div>
               <span style={{ paddingRight: "10px" }}>
                 {time(new Date(h.date))}
               </span>
               <span>{h.value}</span>
+              {error && error.value && error.id === idx && (
+                <button onClick={() => clearHistory(idx)}> Clear</button>
+              )}
             </div>
           ))}
         </div>
